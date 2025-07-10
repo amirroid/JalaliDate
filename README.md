@@ -50,7 +50,7 @@ JalaliDateGlobalConfiguration.convertAlgorithm = BirashkAlgorithm
 Or specify per-instance:
 
 ```kotlin
-val date = JalaliDateTime(year = 1402, month = 5, day = 9, algorithm = BirashkAlgorithm)
+val date = JalaliDateTime(year = 1402, month = 5, `day` = 9, algorithm = BirashkAlgorithm)
 ```
 
 ---
@@ -75,7 +75,7 @@ val formatted = date.format {
     chars("/")
     month()
     chars("/")
-    day()
+    dayTwoDigit()
 }
 ```
 
@@ -122,7 +122,7 @@ You can also combine static characters using `chars(...)`:
 val formatter = JalaliDateTimeFormatter()
     .year().chars(" year - ")
     .monthFullName().chars(" - ")
-    .day()
+    .dayTwoDigit()
 ```
 
 Output:
