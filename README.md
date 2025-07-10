@@ -50,7 +50,7 @@ JalaliDateGlobalConfiguration.convertAlgorithm = BirashkAlgorithm
 Or specify per-instance:
 
 ```kotlin
-val date = JalaliDateTime(jalaliYear = 1402, jalaliMonth = 5, jalaliDay = 9, algorithm = BirashkAlgorithm)
+val date = JalaliDateTime(year = 1402, month = 5, day = 9, algorithm = BirashkAlgorithm)
 ```
 
 ---
