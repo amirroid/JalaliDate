@@ -44,6 +44,9 @@ jobs:
           echo "signing.password=${SIGNING_KEY_PASSWORD}" >> gradle.properties
           echo "signing.secretKeyRingFile=${HOME}/secring.gpg" >> gradle.properties
 
+      - name: Run Tests
+        run: ./gradlew test --no-configuration-cache
+
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:

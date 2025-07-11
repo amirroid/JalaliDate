@@ -68,12 +68,18 @@ public class JalaliDateTime {
         return ((currentIso - startIso + 7) % 7) + 1
     }
 
+
+    private fun monthDaysUntil(month: Int): Int {
+        return jalaliMonthLengths.take(month - 1).sum()
+    }
+
+
     override fun equals(other: Any?): Boolean {
         return other is JalaliDateTime && other.toString() == toString()
     }
 
     override fun toString(): String =
-        "JalaliDate($jalaliYear, $jalaliMonth, $jalaliDay, $hour, $minute, $second)"
+        "JalaliDate(year=$jalaliYear, month=$jalaliMonth, day=$jalaliDay, hour=$hour, minute=$minute, second=$second)"
 
     public fun copyGregorian(
         year: Int = gregorianYear,
@@ -241,11 +247,6 @@ public class JalaliDateTime {
             "مه", "آبا", "آذر",
             "دی", "بهم", "اسف"
         )
-
-
-        public fun monthDaysUntil(month: Int): Int {
-            return jalaliMonthLengths.take(month - 1).sum()
-        }
     }
 
     public constructor(
