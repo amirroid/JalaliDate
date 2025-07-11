@@ -1,10 +1,7 @@
-# JalaliDate
+# JalaliDate [![Maven Central](https://img.shields.io/maven-central/v/io.github.amirroid/jalalidate?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirroid/jalalidate) ![Platform](https://img.shields.io/badge/Android-3aab58) ![Platform](https://img.shields.io/badge/Desktop-097cd5) ![Platform](https://img.shields.io/badge/IOS-d32408) ![Platform](https://img.shields.io/badge/JS-f7e025)
 
 📆 A Kotlin Multiplatform library for handling Persian (Jalali) dates with formatting and parsing
 support.
-
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirroid/jalalidate?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirroid/jalalidate)
-
 ---
 
 ## Features
