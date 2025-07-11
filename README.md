@@ -193,7 +193,7 @@ JalaliDateTime(1402, 5, 10, 14, 45, 30).copyGregorian(year = 2023, month = 8, da
 // Returns JalaliDateTime corresponding to Gregorian 2023/08/01
 
 JalaliDateTime(1402, 5, 10, 14, 45, 30).copyJalali(year = 1403, month = 6, day = 20)
-// JalaliDateTime(jalaliYear=1403, jalaliMonth=6, jalaliDay=20, hour=14, minute=45, second=30)
+// JalaliDateTime(year=1403, month=6, day=20, hour=14, minute=45, second=30)
 ```
 
 </details>
@@ -229,8 +229,8 @@ date.monthName.english // "Mehr"
 date.monthName.persian // "مهر"
 
 date.dayOfWeek() // DayOfWeek.SATURDAY
-date.dayOfWeek(weekStartDay = DayOfWeek.SUNDAY) // DayOfWeek.SATURDAY (or equivalent enum)
-date.dayOfWeekNumber() // 7 (assuming week starts on Saturday)
+date.dayOfWeek(weekStartDay = DayOfWeek.SUNDAY) // DayOfWeek.SATURDAY
+date.dayOfWeekNumber() // 7 (if week starts on Saturday)
 ```
 
 </details>
