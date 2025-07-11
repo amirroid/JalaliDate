@@ -120,9 +120,11 @@ You can also combine static characters using `chars(...)`:
 
 ```kotlin
 val formatter = JalaliDateTimeFormatter()
-    .year().chars(" year - ")
-    .monthFullName().chars(" - ")
-    .day()
+    .year()
+    .chars(" year - ")
+    .dayOneDigit()
+    .chars(" - ")
+    .monthFullName()
 ```
 
 Output:
@@ -141,7 +143,7 @@ Output:
 ```kotlin
 val date = JalaliDateTime(1402, 5, 9)
 val formatted = date.format {
-    byUnicodePattern("yyyy MMMM dd")
+    byUnicodePattern("yyyy dd MMMM")
 }
 // Output: 1402 مرداد 09
 ```
@@ -153,7 +155,7 @@ val formatted = date.format {
 
 ```kotlin
 val input = "1402 مرد 09"
-val formatter = JalaliDateTimeFormatter().byUnicodePattern("yyyy MMM dd")
+val formatter = JalaliDateTimeFormatter().byUnicodePattern("yyyy dd MMM")
 val date = formatter.parse(input)
 println(date.jalaliMonth) // 5
 ```
