@@ -108,32 +108,32 @@ public class JalaliDateTime {
 
 
     // Operators
-    public fun plusGregorianDays(days: Int): JalaliDateTime = fromGregorian(
+    public fun plusDays(days: Int): JalaliDateTime = fromGregorian(
         gregorian.plus(days, DateTimeUnit.DAY),
         algorithm
     )
 
-    public fun minusGregorianDays(days: Int): JalaliDateTime = fromGregorian(
+    public fun minusDays(days: Int): JalaliDateTime = fromGregorian(
         gregorian.minus(days, DateTimeUnit.DAY),
         algorithm
     )
 
-    public fun plusGregorianMonths(months: Int): JalaliDateTime = fromGregorian(
+    public fun plusMonths(months: Int): JalaliDateTime = fromGregorian(
         gregorian.plus(months, DateTimeUnit.MONTH),
         algorithm
     )
 
-    public fun minusGregorianMonths(months: Int): JalaliDateTime = fromGregorian(
+    public fun minusMonths(months: Int): JalaliDateTime = fromGregorian(
         gregorian.minus(months, DateTimeUnit.MONTH),
         algorithm
     )
 
-    public fun plusGregorianYears(years: Int): JalaliDateTime = fromGregorian(
+    public fun plusYears(years: Int): JalaliDateTime = fromGregorian(
         gregorian.plus(years, DateTimeUnit.YEAR),
         algorithm
     )
 
-    public fun minusGregorianYears(years: Int): JalaliDateTime = fromGregorian(
+    public fun minusYears(years: Int): JalaliDateTime = fromGregorian(
         gregorian.minus(years, DateTimeUnit.YEAR),
         algorithm
     )
@@ -167,35 +167,6 @@ public class JalaliDateTime {
         gregorian.minus(seconds, DateTimeUnit.SECOND),
         algorithm
     )
-
-    public fun plusJalaliDays(days: Int): JalaliDateTime =
-        fromGregorian(gregorian.plus(days, DateTimeUnit.DAY), algorithm)
-
-    public fun minusJalaliDays(days: Int): JalaliDateTime = plusJalaliDays(-days)
-
-    public fun plusJalaliMonths(months: Int): JalaliDateTime {
-        val totalMonths = (jalaliYear * 12 + (jalaliMonth - 1)) + months
-        val newYear = totalMonths / 12
-        val newMonth = totalMonths % 12 + 1
-
-        val maxDay = maxDayInMonth(newYear, newMonth)
-        val newDay = if (jalaliDay > maxDay) maxDay else jalaliDay
-
-        return JalaliDateTime(newYear, newMonth, newDay, algorithm)
-    }
-
-    public fun minusJalaliMonths(months: Int): JalaliDateTime =
-        plusJalaliMonths(-months)
-
-    public fun plusJalaliYears(years: Int): JalaliDateTime {
-        val newYear = jalaliYear + years
-        val maxDay = jalaliMonthLengths[jalaliMonth - 1]
-        val newDay = minOf(jalaliDay, maxDay)
-        return JalaliDateTime(newYear, jalaliMonth, newDay, algorithm)
-    }
-
-    public fun minusJalaliYears(years: Int): JalaliDateTime =
-        plusJalaliYears(-years)
 
     private fun maxDayInMonth(
         year: Int,
