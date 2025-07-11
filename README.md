@@ -3,6 +3,7 @@
 📆 A Kotlin Multiplatform library for handling Persian (Jalali) dates with formatting and parsing
 support.
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirroid/jalalidate?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirroid/jalalidate)
 ---
 
 ## Features
@@ -50,7 +51,8 @@ JalaliDateGlobalConfiguration.convertAlgorithm = BirashkAlgorithm
 Or specify per-instance:
 
 ```kotlin
-val date = JalaliDateTime(jalaliYear = 1402, jalaliMonth = 5, jalaliDay = 9, algorithm = BirashkAlgorithm)
+val date =
+    JalaliDateTime(jalaliYear = 1402, jalaliMonth = 5, jalaliDay = 9, algorithm = BirashkAlgorithm)
 ```
 
 ---
