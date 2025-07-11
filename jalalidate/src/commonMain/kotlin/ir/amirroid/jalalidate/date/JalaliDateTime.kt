@@ -4,6 +4,7 @@ import ir.amirroid.jalalidate.algorithm.JalaliAlgorithm
 import ir.amirroid.jalalidate.configuration.JalaliDateGlobalConfiguration
 import ir.amirroid.jalalidate.formatter.JalaliDateTimeFormatter
 import ir.amirroid.jalalidate.minus
+import ir.amirroid.jalalidate.models.MonthName
 import ir.amirroid.jalalidate.plus
 import ir.amirroid.jalalidate.utils.getCurrentLocalDateTime
 import kotlinx.datetime.DateTimeUnit
@@ -30,20 +31,6 @@ public class JalaliDateTime {
     public val gregorian: LocalDateTime
         get() = algorithm.toGregorian(this)
 
-
-    public fun dayOfWeek(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): DayOfWeek {
-        val current = gregorian.dayOfWeek.isoDayNumber
-        val start = weekStartDay.isoDayNumber
-        val shiftedIndex = ((current - start + 7) % 7)
-        return DayOfWeek.entries[shiftedIndex]
-    }
-
-    public fun dayOfWeekNumber(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): Int {
-        val currentDay = gregorian.dayOfWeek.isoDayNumber
-        val startDay = weekStartDay.isoDayNumber
-        return ((currentDay - startDay + 7) % 7) + 1
-    }
-
     public val weekOfYear: Int
         get() {
             val daysSinceYearStart = jalaliDay - 1 + monthDaysUntil(jalaliMonth)
@@ -59,12 +46,30 @@ public class JalaliDateTime {
     public val monthLength: Int
         get() = jalaliMonthLengths[jalaliMonth - 1]
 
+    public val monthName: MonthName
+        get() = MonthName(
+            english = jalaliMonthNamesEnglish[jalaliMonth - 1],
+            persian = jalaliMonthNames[jalaliMonth - 1],
+        )
+
+    public fun dayOfWeek(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): DayOfWeek {
+        val current = gregorian.dayOfWeek.isoDayNumber
+        val start = weekStartDay.isoDayNumber
+        val shiftedIndex = ((current - start + 7) % 7)
+        return DayOfWeek.entries[shiftedIndex]
+    }
+
+    public fun dayOfWeekNumber(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): Int {
+        val currentDay = gregorian.dayOfWeek.isoDayNumber
+        val startDay = weekStartDay.isoDayNumber
+        return ((currentDay - startDay + 7) % 7) + 1
+    }
+
     public fun monthDaysUntil(month: Int): Int {
         return jalaliMonthLengths.take(month - 1).sum()
     }
 
     override fun toString(): String = "JalaliDate($jalaliYear, $jalaliMonth, $jalaliDay)"
-
 
     public fun copyGregorian(
         year: Int = gregorianYear,
@@ -209,7 +214,7 @@ public class JalaliDateTime {
         }
 
         public fun now(algorithm: JalaliAlgorithm = JalaliDateGlobalConfiguration.convertAlgorithm): JalaliDateTime =
-            fromGregorian(getCurrentLocalDateTime())
+            fromGregorian(getCurrentLocalDateTime(), algorithm)
 
         @Suppress("FunctionName")
         public fun Format(block: JalaliDateTimeFormatter.() -> Unit): JalaliDateTimeFormatter {
@@ -218,11 +223,18 @@ public class JalaliDateTime {
 
         public val jalaliMonthLengths: IntArray =
             intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
+
         public val jalaliMonthNames: List<String> = listOf(
             "فروردین", "اردیبهشت", "خرداد",
             "تیر", "مرداد", "شهریور",
             "مهر", "آبان", "آذر",
             "دی", "بهمن", "اسفند"
+        )
+        public val jalaliMonthNamesEnglish: List<String> = listOf(
+            "Farvardin", "Ordibehesht", "Khordad",
+            "Tir", "Mordad", "Shahrivar",
+            "Mehr", "Aban", "Azar",
+            "Dey", "Bahman", "Esfand"
         )
         public val jalaliMonthShortNames: List<String> = listOf(
             "فرو", "ارد", "خرد",

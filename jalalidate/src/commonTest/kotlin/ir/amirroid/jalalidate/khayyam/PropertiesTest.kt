@@ -21,6 +21,14 @@ class PropertiesTest {
     }
 
     @Test
+    fun testJalaliLeapYearAlgorithm() {
+        assertTrue(algorithm.isJalaliLeapYear(1399))
+        assertFalse(algorithm.isJalaliLeapYear(1400))
+        assertTrue(algorithm.isJalaliLeapYear(1395))
+        assertFalse(algorithm.isJalaliLeapYear(1394))
+    }
+
+    @Test
     fun testGregorianLeapYear() {
         val leapYear =
             JalaliDateTime.fromGregorian(LocalDateTime(2020, 2, 29, 0, 0), algorithm = algorithm)
@@ -52,5 +60,14 @@ class PropertiesTest {
     fun testDayOfWeekNumberForAnotherDate() {
         val date = JalaliDateTime(1402, 1, 4, algorithm = algorithm) // 2023-03-24 (Friday)
         assertEquals(7, date.dayOfWeekNumber()) // Friday = 7
+    }
+
+    @Test
+    fun testJalaliMonthName() {
+        val date = JalaliDateTime(1403, 1, 1, algorithm = algorithm)
+        val monthName = date.monthName
+
+        assertEquals("Farvardin", monthName.english)
+        assertEquals("فروردین", monthName.persian)
     }
 }

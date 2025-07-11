@@ -26,7 +26,12 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    js()
+    
+    js {
+        browser()
+        nodejs()
+    }
+
     listOf(
         iosX64(),
         iosArm64(),

@@ -122,8 +122,9 @@ public object BirashkAlgorithm : JalaliAlgorithm {
     }
 
     override fun isJalaliLeapYear(year: Int): Boolean {
-        val epbase = if (year >= 0) year - 474 else year - 473
-        val epyear = 474 + positiveModulo(epbase, 2820)
-        return ((epyear * 682) % 2816) < 682
+        val epBase = if (year > 0) year - 474 else year - 473
+        val epYear = 474 + positiveModulo(epBase, 2820)
+        val mod = positiveModulo((epYear + 38) * 682, 2816)
+        return mod < 682
     }
 }
