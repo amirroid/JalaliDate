@@ -53,23 +53,27 @@ public class JalaliDateTime {
         )
 
     public fun dayOfWeek(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): DayOfWeek {
-        val current = gregorian.dayOfWeek.isoDayNumber
-        val start = weekStartDay.isoDayNumber
-        val shiftedIndex = ((current - start + 7) % 7)
-        return DayOfWeek.entries[shiftedIndex]
+        val currentIso = gregorian.dayOfWeek.isoDayNumber
+        val startIso = weekStartDay.isoDayNumber
+        val shifted = (currentIso - startIso + 7) % 7
+        val daysByIso = DayOfWeek.entries
+        val startIndex = daysByIso.indexOf(weekStartDay)
+        val finalIndex = (startIndex + shifted) % 7
+        return daysByIso[finalIndex]
     }
 
     public fun dayOfWeekNumber(weekStartDay: DayOfWeek = DayOfWeek.SATURDAY): Int {
-        val currentDay = gregorian.dayOfWeek.isoDayNumber
-        val startDay = weekStartDay.isoDayNumber
-        return ((currentDay - startDay + 7) % 7) + 1
+        val currentIso = gregorian.dayOfWeek.isoDayNumber
+        val startIso = weekStartDay.isoDayNumber
+        return ((currentIso - startIso + 7) % 7) + 1
     }
 
-    public fun monthDaysUntil(month: Int): Int {
-        return jalaliMonthLengths.take(month - 1).sum()
+    override fun equals(other: Any?): Boolean {
+        return other is JalaliDateTime && other.toString() == toString()
     }
 
-    override fun toString(): String = "JalaliDate($jalaliYear, $jalaliMonth, $jalaliDay)"
+    override fun toString(): String =
+        "JalaliDate($jalaliYear, $jalaliMonth, $jalaliDay, $hour, $minute, $second)"
 
     public fun copyGregorian(
         year: Int = gregorianYear,
@@ -108,15 +112,33 @@ public class JalaliDateTime {
 
 
     // Operators
-    public fun plus(amount: Int, unit: DateTimeUnit): JalaliDateTime = fromGregorian(
-        gregorian.plus(amount, unit),
-        algorithm
-    )
+    public fun plus(amount: Int, unit: DateTimeUnit): JalaliDateTime {
+        return when (unit) {
+            DateTimeUnit.YEAR -> plusYears(amount)
+            DateTimeUnit.MONTH -> plusMonths(amount)
+            DateTimeUnit.WEEK -> plusWeeks(amount)
+            DateTimeUnit.DAY -> plusDays(amount)
+            else ->
+                fromGregorian(
+                    gregorian.plus(amount, unit),
+                    algorithm
+                )
+        }
+    }
 
-    public fun minus(amount: Int, unit: DateTimeUnit): JalaliDateTime = fromGregorian(
-        gregorian.minus(amount, unit),
-        algorithm
-    )
+    public fun minus(amount: Int, unit: DateTimeUnit): JalaliDateTime {
+        return when (unit) {
+            DateTimeUnit.YEAR -> minusYears(amount)
+            DateTimeUnit.MONTH -> minusMonths(amount)
+            DateTimeUnit.WEEK -> minusWeeks(amount)
+            DateTimeUnit.DAY -> minusDays(amount)
+            else ->
+                fromGregorian(
+                    gregorian.minus(amount, unit),
+                    algorithm
+                )
+        }
+    }
 
 
     public operator fun plus(interval: DateTimeInterval): JalaliDateTime =
@@ -126,18 +148,18 @@ public class JalaliDateTime {
         minus(amount = interval.amount, unit = interval.unit)
 
 
-    public fun plusDays(days: Int): JalaliDateTime = plus(days, DateTimeUnit.DAY)
-    public fun minusDays(days: Int): JalaliDateTime = minus(days, DateTimeUnit.DAY)
+    public fun plusDays(days: Int): JalaliDateTime = plusJalaliCalendarDays(days)
+    public fun minusDays(days: Int): JalaliDateTime = minusJalaliCalendarDays(days)
 
 
-    public fun plusWeeks(weeks: Int): JalaliDateTime = plus(weeks, DateTimeUnit.WEEK)
-    public fun minusWeeks(weeks: Int): JalaliDateTime = minus(weeks, DateTimeUnit.WEEK)
+    public fun plusWeeks(weeks: Int): JalaliDateTime = plusJalaliCalendarDays(weeks * 7)
+    public fun minusWeeks(weeks: Int): JalaliDateTime = minusJalaliCalendarDays(weeks * 7)
 
-    public fun plusMonths(months: Int): JalaliDateTime = plus(months, DateTimeUnit.MONTH)
-    public fun minusMonths(months: Int): JalaliDateTime = minus(months, DateTimeUnit.MONTH)
+    public fun plusMonths(months: Int): JalaliDateTime = plusJalaliCalendarMonths(months)
+    public fun minusMonths(months: Int): JalaliDateTime = minusJalaliCalendarMonths(months)
 
-    public fun plusYears(years: Int): JalaliDateTime = plus(years, DateTimeUnit.YEAR)
-    public fun minusYears(years: Int): JalaliDateTime = minus(years, DateTimeUnit.YEAR)
+    public fun plusYears(years: Int): JalaliDateTime = plusJalaliCalendarYears(years)
+    public fun minusYears(years: Int): JalaliDateTime = minusJalaliCalendarYears(years)
 
     public fun plusHours(hours: Int): JalaliDateTime = plus(hours, DateTimeUnit.HOUR)
     public fun minusHours(hours: Int): JalaliDateTime = minus(hours, DateTimeUnit.HOUR)
@@ -148,8 +170,38 @@ public class JalaliDateTime {
     public fun plusSeconds(seconds: Int): JalaliDateTime = plus(seconds, DateTimeUnit.SECOND)
     public fun minusSeconds(seconds: Int): JalaliDateTime = minus(seconds, DateTimeUnit.SECOND)
 
-    private fun maxDayInMonth(): Int {
-        return if (jalaliMonth == 12 && isJalaliLeapYear) 30 else jalaliMonthLengths[jalaliMonth - 1]
+    private fun plusJalaliCalendarDays(days: Int): JalaliDateTime =
+        fromGregorian(gregorian.plus(days, DateTimeUnit.DAY), algorithm)
+
+    private fun minusJalaliCalendarDays(days: Int): JalaliDateTime =
+        plusJalaliCalendarDays(-days)
+
+    private fun plusJalaliCalendarMonths(months: Int): JalaliDateTime {
+        val totalMonths = (jalaliYear * 12 + (jalaliMonth - 1)) + months
+        val newYear = totalMonths / 12
+        val newMonth = totalMonths % 12 + 1
+
+        val maxDay = maxDayInMonth(newYear, newMonth)
+        val newDay = if (jalaliDay > maxDay) maxDay else jalaliDay
+
+        return JalaliDateTime(newYear, newMonth, newDay, hour, minute, second, algorithm)
+    }
+
+    private fun minusJalaliCalendarMonths(months: Int): JalaliDateTime =
+        plusJalaliCalendarMonths(-months)
+
+    private fun plusJalaliCalendarYears(years: Int): JalaliDateTime {
+        val newYear = jalaliYear + years
+        val maxDay = maxDayInMonth(newYear, jalaliMonth)
+        val newDay = minOf(jalaliDay, maxDay)
+        return JalaliDateTime(newYear, jalaliMonth, newDay, hour, minute, second, algorithm)
+    }
+
+    private fun minusJalaliCalendarYears(years: Int): JalaliDateTime =
+        plusJalaliCalendarYears(-years)
+
+    private fun maxDayInMonth(year: Int = jalaliYear, month: Int = jalaliMonth): Int {
+        return if (month == 12 && algorithm.isJalaliLeapYear(year)) 30 else jalaliMonthLengths[month - 1]
     }
 
     public companion object {
@@ -189,6 +241,11 @@ public class JalaliDateTime {
             "مه", "آبا", "آذر",
             "دی", "بهم", "اسف"
         )
+
+
+        public fun monthDaysUntil(month: Int): Int {
+            return jalaliMonthLengths.take(month - 1).sum()
+        }
     }
 
     public constructor(
@@ -256,5 +313,25 @@ public class JalaliDateTime {
         this.hour = hour
         this.minute = minute
         this.second = second
+    }
+
+    override fun hashCode(): Int {
+        var result = gregorianYear
+        result = 31 * result + gregorianMonth
+        result = 31 * result + gregorianDay
+        result = 31 * result + jalaliYear
+        result = 31 * result + jalaliMonth
+        result = 31 * result + jalaliDay
+        result = 31 * result + hour
+        result = 31 * result + minute
+        result = 31 * result + second
+        result = 31 * result + algorithm.hashCode()
+        result = 31 * result + weekOfYear
+        result = 31 * result + isJalaliLeapYear.hashCode()
+        result = 31 * result + isGregorianLeapYear.hashCode()
+        result = 31 * result + monthLength
+        result = 31 * result + gregorian.hashCode()
+        result = 31 * result + monthName.hashCode()
+        return result
     }
 }

@@ -63,8 +63,7 @@ class OperatorsTest {
     fun testPlusMonths() {
         val date = JalaliDateTime(1400, 10, 10, algorithm)
         val result = date.plusMonths(3)
-        val expected =
-            JalaliDateTime.fromGregorian(date.gregorian.plus(3, DateTimeUnit.MONTH), algorithm)
+        val expected = JalaliDateTime(1401, 1, 10, algorithm)
         assertEquals(expected.jalaliYear, result.jalaliYear)
         assertEquals(expected.jalaliMonth, result.jalaliMonth)
         assertEquals(expected.jalaliDay, result.jalaliDay)
@@ -168,10 +167,9 @@ class OperatorsTest {
 
     @Test
     fun testMinusDateTimeInterval() {
-        val date = JalaliDateTime.fromGregorian(LocalDateTime(2023, 3, 21, 10, 0, 30), algorithm)
+        val date = JalaliDateTime(1402, 1, 1, algorithm)
         val result = date - 2.months - 1.months
-        val expected =
-            JalaliDateTime.fromGregorian(date.gregorian.minus(3, DateTimeUnit.MONTH), algorithm)
+        val expected = JalaliDateTime(1401, 10, 1, algorithm)
         assertEquals(expected.jalaliMonth, result.jalaliMonth)
     }
 

@@ -156,6 +156,8 @@ val formatted = date.format {
 
 </details>
 
+---
+
 <details>
 <summary>Parse with short month name</summary>
 
@@ -164,6 +166,71 @@ val input = "1402 مرد 09"
 val formatter = JalaliDateTimeFormatter().byUnicodePattern("yyyy dd MMM")
 val date = formatter.parse(input)
 println(date.jalaliMonth) // 5
+```
+
+</details>
+
+---
+
+<details>
+<summary>Using plus and minus operators with DateTimeInterval</summary>
+
+```kotlin
+val date = JalaliDateTime(1402, 5, 10, 12, 30, 15)
+date + 5.days - 2.months // JalaliDateTime with Jalali date 1402/03/15 and time 12:30:15
+date - 1.years + 10.days // JalaliDateTime with Jalali date 1401/05/20 and time 12:30:15
+```
+
+</details>
+
+---
+
+<details>
+<summary>Using copyGregorian and copyJalali</summary>
+
+```kotlin
+JalaliDateTime(1402, 5, 10, 14, 45, 30).copyGregorian(year = 2023, month = 8, day = 1)
+// Returns JalaliDateTime corresponding to Gregorian 2023/08/01
+
+JalaliDateTime(1402, 5, 10, 14, 45, 30).copyJalali(year = 1403, month = 6, day = 20)
+// JalaliDateTime(jalaliYear=1403, jalaliMonth=6, jalaliDay=20, hour=14, minute=45, second=30)
+```
+
+</details>
+
+---
+
+<details>
+<summary>Main properties of JalaliDateTime</summary>
+
+```kotlin
+val date = JalaliDateTime(1402, 7, 15, 10, 20, 30)
+
+date.gregorianYear // 2023
+date.gregorianMonth // 10
+date.gregorianDay // 7
+
+date.jalaliYear // 1402
+date.jalaliMonth // 7
+date.jalaliDay // 15
+
+date.algorithm::class.simpleName // "KhayyamAlgorithm" or "BirashkAlgorithm"
+
+date.hour // 10
+date.minute // 20
+date.second // 30
+
+date.weekOfYear // 33
+date.isJalaliLeapYear // false
+date.isGregorianLeapYear // false
+
+date.monthLength // 31
+date.monthName.english // "Mehr"
+date.monthName.persian // "مهر"
+
+date.dayOfWeek() // DayOfWeek.SATURDAY
+date.dayOfWeek(weekStartDay = DayOfWeek.SUNDAY) // DayOfWeek.SATURDAY (or equivalent enum)
+date.dayOfWeekNumber() // 7 (assuming week starts on Saturday)
 ```
 
 </details>
