@@ -108,65 +108,45 @@ public class JalaliDateTime {
 
 
     // Operators
-    public fun plusDays(days: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(days, DateTimeUnit.DAY),
+    public fun plus(amount: Int, unit: DateTimeUnit): JalaliDateTime = fromGregorian(
+        gregorian.plus(amount, unit),
         algorithm
     )
 
-    public fun minusDays(days: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(days, DateTimeUnit.DAY),
+    public fun minus(amount: Int, unit: DateTimeUnit): JalaliDateTime = fromGregorian(
+        gregorian.minus(amount, unit),
         algorithm
     )
 
-    public fun plusMonths(months: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(months, DateTimeUnit.MONTH),
-        algorithm
-    )
 
-    public fun minusMonths(months: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(months, DateTimeUnit.MONTH),
-        algorithm
-    )
+    public operator fun plus(interval: DateTimeInterval): JalaliDateTime =
+        plus(amount = interval.amount, unit = interval.unit)
 
-    public fun plusYears(years: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(years, DateTimeUnit.YEAR),
-        algorithm
-    )
+    public operator fun minus(interval: DateTimeInterval): JalaliDateTime =
+        minus(amount = interval.amount, unit = interval.unit)
 
-    public fun minusYears(years: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(years, DateTimeUnit.YEAR),
-        algorithm
-    )
 
-    public fun plusHours(hours: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(hours, DateTimeUnit.HOUR),
-        algorithm
-    )
+    public fun plusDays(days: Int): JalaliDateTime = plus(days, DateTimeUnit.DAY)
+    public fun minusDays(days: Int): JalaliDateTime = minus(days, DateTimeUnit.DAY)
 
-    public fun minusHours(hours: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(hours, DateTimeUnit.HOUR),
-        algorithm
-    )
 
-    public fun plusMinutes(minutes: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(minutes, DateTimeUnit.MINUTE),
-        algorithm
-    )
+    public fun plusWeeks(weeks: Int): JalaliDateTime = plus(weeks, DateTimeUnit.WEEK)
+    public fun minusWeeks(weeks: Int): JalaliDateTime = minus(weeks, DateTimeUnit.WEEK)
 
-    public fun minusMinutes(minutes: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(minutes, DateTimeUnit.MINUTE),
-        algorithm
-    )
+    public fun plusMonths(months: Int): JalaliDateTime = plus(months, DateTimeUnit.MONTH)
+    public fun minusMonths(months: Int): JalaliDateTime = minus(months, DateTimeUnit.MONTH)
 
-    public fun plusSeconds(seconds: Int): JalaliDateTime = fromGregorian(
-        gregorian.plus(seconds, DateTimeUnit.SECOND),
-        algorithm
-    )
+    public fun plusYears(years: Int): JalaliDateTime = plus(years, DateTimeUnit.YEAR)
+    public fun minusYears(years: Int): JalaliDateTime = minus(years, DateTimeUnit.YEAR)
 
-    public fun minusSeconds(seconds: Int): JalaliDateTime = fromGregorian(
-        gregorian.minus(seconds, DateTimeUnit.SECOND),
-        algorithm
-    )
+    public fun plusHours(hours: Int): JalaliDateTime = plus(hours, DateTimeUnit.HOUR)
+    public fun minusHours(hours: Int): JalaliDateTime = minus(hours, DateTimeUnit.HOUR)
+
+    public fun plusMinutes(minutes: Int): JalaliDateTime = plus(minutes, DateTimeUnit.MINUTE)
+    public fun minusMinutes(minutes: Int): JalaliDateTime = minus(minutes, DateTimeUnit.MINUTE)
+
+    public fun plusSeconds(seconds: Int): JalaliDateTime = plus(seconds, DateTimeUnit.SECOND)
+    public fun minusSeconds(seconds: Int): JalaliDateTime = minus(seconds, DateTimeUnit.SECOND)
 
     private fun maxDayInMonth(): Int {
         return if (jalaliMonth == 12 && isJalaliLeapYear) 30 else jalaliMonthLengths[jalaliMonth - 1]
