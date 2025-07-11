@@ -47,7 +47,7 @@ class PropertiesTest {
 
         assertEquals(31, dateFarvardin.monthLength)
         assertEquals(29, dateEsfand.monthLength)
-        assertEquals(29, dateEsfandLeap.monthLength)
+        assertEquals(30, dateEsfandLeap.monthLength)
     }
 
     @Test
@@ -69,5 +69,29 @@ class PropertiesTest {
 
         assertEquals("Farvardin", monthName.english)
         assertEquals("فروردین", monthName.persian)
+    }
+
+    @Test
+    fun testMonthLength31Days() {
+        val date = JalaliDateTime(1400, 1, 1, algorithm)
+        assertEquals(31, date.monthLength)
+    }
+
+    @Test
+    fun testMonthLength30Days() {
+        val date = JalaliDateTime(1400, 7, 1, algorithm)
+        assertEquals(30, date.monthLength)
+    }
+
+    @Test
+    fun testMonthLengthLeapYear() {
+        val date = JalaliDateTime(1399, 12, 1, algorithm)
+        assertEquals(30, date.monthLength)
+    }
+
+    @Test
+    fun testMonthLengthNonLeapYear() {
+        val date = JalaliDateTime(1400, 12, 1, algorithm)
+        assertEquals(29, date.monthLength)
     }
 }

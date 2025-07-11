@@ -44,7 +44,7 @@ public class JalaliDateTime {
         get() = algorithm.isGregorianLeap(gregorianYear)
 
     public val monthLength: Int
-        get() = jalaliMonthLengths[jalaliMonth - 1]
+        get() = maxDayInMonth()
 
     public val monthName: MonthName
         get() = MonthName(
@@ -168,12 +168,8 @@ public class JalaliDateTime {
         algorithm
     )
 
-    private fun maxDayInMonth(
-        year: Int,
-        month: Int,
-        algorithm: JalaliAlgorithm = JalaliDateGlobalConfiguration.convertAlgorithm
-    ): Int {
-        return if (month == 12 && algorithm.isJalaliLeapYear(year)) 30 else jalaliMonthLengths[month - 1]
+    private fun maxDayInMonth(): Int {
+        return if (jalaliMonth == 12 && isJalaliLeapYear) 30 else jalaliMonthLengths[jalaliMonth - 1]
     }
 
     public companion object {
