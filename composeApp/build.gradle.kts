@@ -69,7 +69,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            implementation(project(":lib"))
+            implementation(project(":jalalidate"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

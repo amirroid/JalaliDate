@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalWasmDsl::class)
 
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,19 +13,29 @@ plugins {
 
 version = "1.0.0-alpha1"
 group = "io.github.amirroid"
-val projectName = "JalaliDate"
+val projectName = project.name
 
 kotlin {
     explicitApi()
 
-    jvm()
-    androidTarget()
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
-    js(IR) {
-        browser()
-        nodejs()
+    jvm("desktop")
+    androidTarget {
+        publishLibraryVariants("release", "debug")
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+    js()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = projectName
+            isStatic = true
+        }
     }
 
     sourceSets {
@@ -38,17 +50,11 @@ kotlin {
 
 
 android {
-    namespace = "ir.amirroid.jalalidate"
+    namespace = group.toString()
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 
     compileOptions {
@@ -64,13 +70,13 @@ mavenPublishing {
 
     coordinates(
         groupId = group.toString(),
-        artifactId = projectName.lowercase(),
+        artifactId = projectName,
         version = version.toString()
     )
 
     pom {
         name.set(projectName)
-        inceptionYear = "2025"
+        inceptionYear.set("2025")
         description.set("A Kotlin Multiplatform library for Jalali (Persian) date handling, conversion, formatting and parsing.")
         url.set("https://github.com/amirroid/JalaliDate")
 

@@ -1,4 +1,4 @@
-rootProject.name = "JalaliDate"
+rootProject.name = "JalaliDateLibrary"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -30,4 +30,4 @@ dependencyResolutionManagement {
 
 
 include(":composeApp")
-include(":lib")
+include(":jalalidate")
