@@ -35,6 +35,7 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         outputModuleName.set("composeApp")
+        binaries.executable()
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -49,7 +50,6 @@ kotlin {
                 }
             }
         }
-        binaries.executable()
     }
     
     sourceSets {

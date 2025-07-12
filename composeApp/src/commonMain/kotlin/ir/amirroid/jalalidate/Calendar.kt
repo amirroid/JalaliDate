@@ -72,7 +72,7 @@ fun Calendar() {
     ) {
         CenterAlignedTopAppBar(
             title = {
-                Text("Calendar (Current:${currentFormattedDate})")
+                Text("JalaliDate Sample (Current:${currentFormattedDate})")
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Color.Transparent),
             actions = {
@@ -120,7 +120,7 @@ fun CalendarDaysContent(deltaMonth: Int) {
                 Day(
                     day = it,
                     month = previousMonth.jalaliMonth,
-                    monthName = previousMonth.monthName.persian,
+                    monthName = previousMonth.monthName.english,
                     year = previousMonth.jalaliYear
                 )
             }
@@ -132,7 +132,7 @@ fun CalendarDaysContent(deltaMonth: Int) {
                 day = day,
                 isToday = day == today.jalaliDay && deltaMonth == 0,
                 month = targetMonth.jalaliMonth,
-                monthName = targetMonth.monthName.persian,
+                monthName = targetMonth.monthName.english,
                 year = targetMonth.jalaliYear
             )
         }
@@ -144,7 +144,7 @@ fun CalendarDaysContent(deltaMonth: Int) {
                 Day(
                     day = it,
                     month = nextMonth.jalaliMonth,
-                    monthName = nextMonth.monthName.persian,
+                    monthName = nextMonth.monthName.english,
                     year = nextMonth.jalaliYear
                 )
             }
@@ -156,7 +156,7 @@ fun CalendarDaysContent(deltaMonth: Int) {
                 Day(
                     day = it,
                     month = nextMonth.jalaliMonth,
-                    monthName = nextMonth.monthName.persian,
+                    monthName = nextMonth.monthName.english,
                     year = nextMonth.jalaliYear
                 )
             }

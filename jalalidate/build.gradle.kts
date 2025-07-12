@@ -12,7 +12,7 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "1.0.0-alpha3"
+version = "1.0.0"
 group = "io.github.amirroid"
 val projectName = project.name
 
@@ -35,6 +35,7 @@ kotlin {
 
     wasmJs {
         outputModuleName.set(projectName.lowercase())
+        binaries.executable()
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
@@ -49,7 +50,6 @@ kotlin {
                 }
             }
         }
-        binaries.executable()
     }
 
     listOf(
