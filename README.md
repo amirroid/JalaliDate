@@ -235,17 +235,17 @@ date.hour // 10
 date.minute // 20
 date.second // 30
 
-date.weekOfYear // 33
+date.weekOfYear // 29
 date.isJalaliLeapYear // false
 date.isGregorianLeapYear // false
 
-date.monthLength // 31
+date.monthLength // 30
 date.monthName.english // "Mehr"
 date.monthName.persian // "مهر"
 
 date.dayOfWeek() // DayOfWeek.SATURDAY
 date.dayOfWeek(weekStartDay = DayOfWeek.SUNDAY) // DayOfWeek.SATURDAY
-date.dayOfWeekNumber() // 7 (if week starts on Saturday)
+date.dayOfWeekNumber() // 1 (if week starts on Saturday)
 ```
 
 </details>
