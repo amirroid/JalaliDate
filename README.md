@@ -143,6 +143,21 @@ Output:
 1402 year - مرداد - 9
 ```
 
+> **Note:**  
+> You can change the `locale` in two ways:
+>- **Globally** (the default locale is Persian):
+>```kotlin
+>   JalaliDateGlobalConfiguration.formatterLocale = Locale.ENGLISH
+>```  
+> - **Locally** when formatting a date:
+>```kotlin
+>   date.format {
+>       applyLocale(Locale.ENGLISH)
+>       byUnicodePattern("MMMM yyyy")
+>   }
+>```
+
+
 ---
 
 ## 📚 Examples
