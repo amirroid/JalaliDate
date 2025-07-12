@@ -1,8 +1,15 @@
 package ir.amirroid.jalalidate.formatter
 
 import ir.amirroid.jalalidate.date.JalaliDateTime
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliDayNames
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliDayNamesEnglish
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliDayNamesEnglishShort
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliDayNamesShort
 import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliMonthNames
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliMonthNamesEnglish
 import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliMonthShortNames
+import ir.amirroid.jalalidate.date.JalaliDateTime.Companion.jalaliMonthShortNamesEnglish
+import kotlinx.datetime.DayOfWeek
 
 
 internal data class ParseResult(val value: Int?, val nextPos: Int)
@@ -49,19 +56,59 @@ internal class NumericPart(
     }
 }
 
-internal class MonthNamePart(val full: Boolean) : FormatPart {
-    private val names = if (full) jalaliMonthNames else jalaliMonthShortNames
-    override val name: String get() = "month"
+internal sealed class NamedPart(
+    private val full: Boolean,
+    private val locale: Locale
+) : FormatPart {
+
+    protected abstract val namesEnglishFull: List<String>
+    protected abstract val namesEnglishShort: List<String>
+    protected abstract val namesPersianFull: List<String>
+    protected abstract val namesPersianShort: List<String>
+
+    private val names: List<String> by lazy {
+        when (locale) {
+            Locale.ENGLISH -> if (full) namesEnglishFull else namesEnglishShort
+            Locale.PERSIAN -> if (full) namesPersianFull else namesPersianShort
+        }
+    }
+
+    protected abstract fun extractIndex(date: JalaliDateTime): Int
+    protected abstract fun applyParsedIndex(index: Int): Int
+    abstract override val name: String
 
     override fun format(date: JalaliDateTime): String =
-        names.getOrNull(date.jalaliMonth - 1) ?: ""
+        names.getOrNull(extractIndex(date)) ?: ""
 
     override fun parse(input: String, pos: Int): ParseResult {
-        for ((index, monthName) in names.withIndex()) {
-            if (input.startsWith(monthName, pos)) {
-                return ParseResult(index + 1, pos + monthName.length)
+        for ((index, partName) in names.withIndex()) {
+            if (input.startsWith(partName, pos)) {
+                return ParseResult(applyParsedIndex(index), pos + partName.length)
             }
         }
-        throw IllegalArgumentException("Invalid month name at position $pos")
+        throw IllegalArgumentException("Invalid $name name at position $pos")
     }
+}
+
+internal class MonthNamePart(full: Boolean, locale: Locale) : NamedPart(full, locale) {
+    override val namesEnglishFull = jalaliMonthNamesEnglish
+    override val namesEnglishShort = jalaliMonthShortNamesEnglish
+    override val namesPersianFull = jalaliMonthNames
+    override val namesPersianShort = jalaliMonthShortNames
+    override val name: String = "month"
+
+    override fun extractIndex(date: JalaliDateTime): Int = date.jalaliMonth - 1
+    override fun applyParsedIndex(index: Int): Int = index + 1
+}
+
+internal class WeekDayNamePart(full: Boolean, locale: Locale) : NamedPart(full, locale) {
+    override val namesEnglishFull = jalaliDayNamesEnglish
+    override val namesEnglishShort = jalaliDayNamesEnglishShort
+    override val namesPersianFull = jalaliDayNames
+    override val namesPersianShort = jalaliDayNamesShort
+    override val name: String = "weekday"
+
+    override fun extractIndex(date: JalaliDateTime): Int = date.dayOfWeekNumber() - 1
+
+    override fun applyParsedIndex(index: Int): Int = index
 }

@@ -6,11 +6,14 @@ import ir.amirroid.jalalidate.date.JalaliDateTime
 
 public enum class Padding { ZERO, SPACE }
 
+public enum class Locale { PERSIAN, ENGLISH }
+
 public class JalaliDateTimeFormatter {
     private val parts = mutableListOf<FormatPart>()
+    private var locale = JalaliDateGlobalConfiguration.formatterLocale
 
     public fun byUnicodePattern(pattern: String): JalaliDateTimeFormatter {
-        val regex = "(yyyy|yy|MMMM|MMM|MM|M|dd|d|HH|H|mm|m|ss|s)".toRegex()
+        val regex = "(yyyy|yy|MMMM|MMM|MM|M|dd|d|HH|H|mm|m|ss|s|EEEE|EEE|E)".toRegex()
         var lastIndex = 0
         for (match in regex.findAll(pattern)) {
             if (lastIndex < match.range.first) {
@@ -25,6 +28,10 @@ public class JalaliDateTimeFormatter {
         return this
     }
 
+    public fun applyLocale(locale: Locale) {
+        this.locale = locale
+    }
+
     public fun year(padding: Padding = Padding.ZERO): JalaliDateTimeFormatter =
         addNumericPart("year", { it.jalaliYear }, 4, padding)
 
@@ -35,14 +42,28 @@ public class JalaliDateTimeFormatter {
         addNumericPart("month", { it.jalaliMonth }, 1, Padding.ZERO)
 
     public fun monthFullName(): JalaliDateTimeFormatter {
-        parts += MonthNamePart(full = true)
+        parts += MonthNamePart(full = true, locale = locale)
         return this
     }
 
     public fun monthShortName(): JalaliDateTimeFormatter {
-        parts += MonthNamePart(full = false)
+        parts += MonthNamePart(full = false, locale = locale)
         return this
     }
+
+    public fun weekFullName(): JalaliDateTimeFormatter {
+        parts += WeekDayNamePart(full = true, locale = locale)
+        return this
+    }
+
+    public fun weekShortName(): JalaliDateTimeFormatter {
+        parts += WeekDayNamePart(full = false, locale = locale)
+        return this
+    }
+
+    public fun dayOfWeek(): JalaliDateTimeFormatter =
+        addNumericPart("weekday", { it.dayOfWeekNumber() }, 1, Padding.ZERO)
+
 
     public fun dayTwoDigit(padding: Padding = Padding.ZERO): JalaliDateTimeFormatter =
         addNumericPart("day", { it.jalaliDay }, 2, padding)
@@ -78,11 +99,16 @@ public class JalaliDateTimeFormatter {
         "yyyy" -> NumericPart("year", { it.jalaliYear }, 4, Padding.ZERO)
         "yy" -> NumericPart("yearShort", { it.jalaliYear % 100 }, 2, Padding.ZERO)
 
-        "MMMM" -> MonthNamePart(full = true)
-        "MMM" -> MonthNamePart(full = false)
+        "MMMM" -> MonthNamePart(full = true, locale = locale)
+        "MMM" -> MonthNamePart(full = false, locale = locale)
 
         "MM" -> NumericPart("month", { it.jalaliMonth }, 2, Padding.ZERO)
         "M" -> NumericPart("month", { it.jalaliMonth }, 1, Padding.ZERO)
+
+
+        "EEEE" -> WeekDayNamePart(full = true, locale = locale)
+        "EEE" -> WeekDayNamePart(full = false, locale = locale)
+        "E" -> NumericPart("weekday", { it.dayOfWeekNumber() }, 1, Padding.ZERO)
 
         "dd" -> NumericPart("day", { it.jalaliDay }, 2, Padding.ZERO)
         "d" -> NumericPart("day", { it.jalaliDay }, 1, Padding.ZERO)

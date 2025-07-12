@@ -189,4 +189,34 @@ class ParseTest {
         assertEquals(6, date.jalaliMonth)
         assertEquals(9, date.jalaliDay)
     }
+
+    @Test
+    fun testParseWithWeekShortName() {
+        val input = "ش 1402-6-9"
+        val formatter = JalaliDateTimeFormatter()
+            .weekShortName()
+            .chars(" ")
+            .year()
+            .chars("-")
+            .monthOneDigit()
+            .chars("-")
+            .dayOneDigit()
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(1402, date.jalaliYear)
+        assertEquals(6, date.jalaliMonth)
+        assertEquals(9, date.jalaliDay)
+    }
+
+    @Test
+    fun testParseWithWeekShortNameUnicode() {
+        val input = "ش 1402/6/9"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("EEE yyyy/M/d")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(1402, date.jalaliYear)
+        assertEquals(6, date.jalaliMonth)
+        assertEquals(9, date.jalaliDay)
+    }
 }

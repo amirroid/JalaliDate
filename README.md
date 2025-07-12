@@ -6,7 +6,8 @@
 ![Desktop](https://img.shields.io/badge/Desktop-097cd5)
 ![JS](https://img.shields.io/badge/JS-f7e025?logo=javascript&logoColor=black)
 
-📆 **JalaliDate** is a Kotlin Multiplatform library for handling Persian (Jalali) dates, with support for formatting, parsing, and calendar conversions.
+📆 **JalaliDate** is a Kotlin Multiplatform library for handling Persian (Jalali) dates, with support
+for formatting, parsing, and calendar conversions.
 
 ---
 
@@ -105,22 +106,25 @@ Any missing field (like time) will default to current system time.
 
 ## 🧾 Pattern Reference
 
-| Symbol | Description         | Example (value) |
-|--------|---------------------|-----------------|
-| `yyyy` | Full year           | `1402`          |
-| `yy`   | Last two digits     | `02`            |
-| `MMMM` | Full month name     | `مرداد`         |
-| `MMM`  | Short month name    | `مرد`           |
-| `MM`   | 2-digit month       | `05`            |
-| `M`    | 1 or 2-digit month  | `5`             |
-| `dd`   | 2-digit day         | `09`            |
-| `d`    | 1 or 2-digit day    | `9`             |
-| `HH`   | Hour (24h, 2-digit) | `14`            |
-| `H`    | Hour (24h)          | `14`            |
-| `mm`   | Minutes (2-digit)   | `03`            |
-| `m`    | Minutes             | `3`             |
-| `ss`   | Seconds (2-digit)   | `07`            |
-| `s`    | Seconds             | `7`             |
+| Symbol | Description         | Example (value)     |
+|--------|---------------------|---------------------|
+| `yyyy` | Full year           | `1402`              |
+| `yy`   | Last two digits     | `02`                |
+| `MMMM` | Full month name     | `مرداد` / `Mordad`  |
+| `MMM`  | Short month name    | `مرد` / `Mor`       |
+| `MM`   | 2-digit month       | `05`                |
+| `M`    | 1 or 2-digit month  | `5`                 |
+| `EEEE` | Full weekday name   | `شنبه` / `Saturday` |
+| `EEE`  | Short weekday name  | `ش` / `Sat`         |
+| `E`    | Weekday number      | `1`                 |
+| `dd`   | 2-digit day         | `09`                |
+| `d`    | 1 or 2-digit day    | `9`                 |
+| `HH`   | Hour (24h, 2-digit) | `14`                |
+| `H`    | Hour (24h)          | `14`                |
+| `mm`   | Minutes (2-digit)   | `03`                |
+| `m`    | Minutes             | `3`                 |
+| `ss`   | Seconds (2-digit)   | `07`                |
+| `s`    | Seconds             | `7`                 |
 
 You can also combine static characters using `chars(...)`:
 

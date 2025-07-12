@@ -133,4 +133,18 @@ class FormatTest {
         val formatted = date.format { byUnicodePattern("yyyy/MM/dd HH:mm:ss") }
         assertEquals("1399/12/30 23:59:59", formatted)
     }
+
+    @Test
+    fun testWeekdayPattern() {
+        val date = JalaliDateTime(1399, 12, 30, 23, 59, 59, algorithm = algorithm)
+        val formatted = date.format { byUnicodePattern("EEEE yyyy/MM/dd HH:mm:ss") }
+        assertEquals("شنبه 1399/12/30 23:59:59", formatted)
+    }
+
+    @Test
+    fun testFormatDayOfWeekNumber() {
+        val date = JalaliDateTime(1402, 7, 15, 10, 20, 30)
+        val formatted = date.format { byUnicodePattern("E") }
+        assertEquals("1", formatted)
+    }
 }

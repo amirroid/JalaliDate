@@ -119,6 +119,7 @@ public class JalaliDateTime {
 
     // Operators
     public fun plus(amount: Int, unit: DateTimeUnit): JalaliDateTime {
+        if (amount == 0) return this
         return when (unit) {
             DateTimeUnit.YEAR -> plusYears(amount)
             DateTimeUnit.MONTH -> plusMonths(amount)
@@ -133,6 +134,7 @@ public class JalaliDateTime {
     }
 
     public fun minus(amount: Int, unit: DateTimeUnit): JalaliDateTime {
+        if (amount == 0) return this
         return when (unit) {
             DateTimeUnit.YEAR -> minusYears(amount)
             DateTimeUnit.MONTH -> minusMonths(amount)
@@ -176,13 +178,16 @@ public class JalaliDateTime {
     public fun plusSeconds(seconds: Int): JalaliDateTime = plus(seconds, DateTimeUnit.SECOND)
     public fun minusSeconds(seconds: Int): JalaliDateTime = minus(seconds, DateTimeUnit.SECOND)
 
-    private fun plusJalaliCalendarDays(days: Int): JalaliDateTime =
-        fromGregorian(gregorian.plus(days, DateTimeUnit.DAY), algorithm)
+    private fun plusJalaliCalendarDays(days: Int): JalaliDateTime {
+        if (days == 0) return this
+        return fromGregorian(gregorian.plus(days, DateTimeUnit.DAY), algorithm)
+    }
 
     private fun minusJalaliCalendarDays(days: Int): JalaliDateTime =
         plusJalaliCalendarDays(-days)
 
     private fun plusJalaliCalendarMonths(months: Int): JalaliDateTime {
+        if (months == 0) return this
         val totalMonths = (jalaliYear * 12 + (jalaliMonth - 1)) + months
         val newYear = totalMonths / 12
         val newMonth = totalMonths % 12 + 1
@@ -197,6 +202,7 @@ public class JalaliDateTime {
         plusJalaliCalendarMonths(-months)
 
     private fun plusJalaliCalendarYears(years: Int): JalaliDateTime {
+        if (years == 0) return this
         val newYear = jalaliYear + years
         val maxDay = maxDayInMonth(newYear, jalaliMonth)
         val newDay = minOf(jalaliDay, maxDay)
@@ -246,6 +252,29 @@ public class JalaliDateTime {
             "تیر", "مرد", "شهر",
             "مه", "آبا", "آذر",
             "دی", "بهم", "اسف"
+        )
+
+        public val jalaliMonthShortNamesEnglish: List<String> = listOf(
+            "Far", "Ord", "Khr",
+            "Tir", "Mor", "Shr",
+            "Mehr", "Abn", "Azr",
+            "Dey", "Bah", "Esf"
+        )
+
+        public val jalaliDayNames: List<String> = listOf(
+            "شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"
+        )
+
+        public val jalaliDayNamesEnglish: List<String> = listOf(
+            "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+        )
+
+        public val jalaliDayNamesShort: List<String> = listOf(
+            "ش", "ی", "د", "س", "چ", "پ", "ج"
+        )
+
+        public val jalaliDayNamesEnglishShort: List<String> = listOf(
+            "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
         )
     }
 
