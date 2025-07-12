@@ -1,10 +1,6 @@
 # JalaliDate
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirroid/jalalidate?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirroid/jalalidate)
-![Android](https://img.shields.io/badge/Android-3aab58?logo=android&logoColor=white)
-![iOS](https://img.shields.io/badge/iOS-d32408?logo=apple&logoColor=white)
-![Desktop](https://img.shields.io/badge/Desktop-097cd5)
-![JS](https://img.shields.io/badge/JS-f7e025?logo=javascript&logoColor=black)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amirroid/jalalidate?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amirroid/jalalidate) ![Android](https://img.shields.io/badge/Android-3aab58?logo=android&logoColor=white) ![iOS](https://img.shields.io/badge/iOS-d32408?logo=apple&logoColor=white) ![Desktop](https://img.shields.io/badge/Desktop-097cd5) ![JS](https://img.shields.io/badge/JS-f7e025?logo=javascript&logoColor=black) ![Wasm](https://img.shields.io/badge/Wasm-00599C?logo=webassembly&logoColor=white)
 
 📆 **JalaliDate** is a Kotlin Multiplatform library for handling Persian (Jalali) dates, with support
 for formatting, parsing, and calendar conversions.
@@ -13,7 +9,7 @@ for formatting, parsing, and calendar conversions.
 
 ## Features
 
-- Supports Kotlin Multiplatform (`android`, `jvm`, `ios`, `js`, etc.)
+- Supports Kotlin Multiplatform (`android`, `jvm`, `ios`, `js`, `wasmJs`)
 - Accurate conversion between Jalali and Gregorian calendars
 - Two built-in calendar conversion algorithms
 - Powerful and flexible formatting and parsing system
