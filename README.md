@@ -78,7 +78,7 @@ val formatted = date.format {
     chars("/")
     month()
     chars("/")
-    day()
+    dayTwoDigit()
 }
 ```
 
