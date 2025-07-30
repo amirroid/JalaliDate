@@ -2,6 +2,7 @@ package ir.amirroid.jalalidate.khayyam
 
 import ir.amirroid.jalalidate.algorithm.defaults.KhayyamAlgorithm
 import ir.amirroid.jalalidate.date.JalaliDateTime
+import ir.amirroid.jalalidate.date.days
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -93,5 +94,14 @@ class PropertiesTest {
     fun testMonthLengthNonLeapYear() {
         val date = JalaliDateTime(1400, 12, 1, algorithm)
         assertEquals(29, date.monthLength)
+    }
+
+    @Test
+    fun testIsToday() {
+        val today = JalaliDateTime.now(algorithm)
+        assertTrue(today.isToday)
+
+        val notToday = today - 1.days
+        assertFalse(notToday.isToday)
     }
 }

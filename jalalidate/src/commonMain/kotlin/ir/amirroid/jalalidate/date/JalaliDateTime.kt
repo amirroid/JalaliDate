@@ -46,6 +46,14 @@ public class JalaliDateTime {
     public val monthLength: Int
         get() = maxDayInMonth()
 
+    public val isToday: Boolean
+        get() {
+            val today = algorithm.fromGregorian(getCurrentLocalDateTime())
+            return today.jalaliDay == jalaliDay &&
+                    today.jalaliMonth == jalaliMonth &&
+                    today.jalaliYear == jalaliYear
+        }
+
     public val monthName: MonthName
         get() = MonthName(
             english = jalaliMonthNamesEnglish[jalaliMonth - 1],
