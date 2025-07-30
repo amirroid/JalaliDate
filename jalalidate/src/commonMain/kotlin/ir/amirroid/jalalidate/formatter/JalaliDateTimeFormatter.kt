@@ -128,7 +128,7 @@ public class JalaliDateTimeFormatter {
     internal fun format(date: JalaliDateTime): String =
         parts.joinToString(separator = "") { it.format(date) }
 
-    internal fun parse(
+    public fun parse(
         input: String,
         algorithm: JalaliAlgorithm = JalaliDateGlobalConfiguration.convertAlgorithm
     ): JalaliDateTime {
