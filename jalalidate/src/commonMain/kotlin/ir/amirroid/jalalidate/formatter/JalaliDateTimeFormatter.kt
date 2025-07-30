@@ -35,6 +35,9 @@ public class JalaliDateTimeFormatter {
     public fun year(padding: Padding = Padding.ZERO): JalaliDateTimeFormatter =
         addNumericPart("year", { it.jalaliYear }, 4, padding)
 
+    public fun shortYear(padding: Padding = Padding.ZERO): JalaliDateTimeFormatter =
+        addNumericPart("yearShort", { it.jalaliYear % 100 }, 2, padding)
+
     public fun monthTwoDigit(padding: Padding = Padding.ZERO): JalaliDateTimeFormatter =
         addNumericPart("month", { it.jalaliMonth }, 2, padding)
 
