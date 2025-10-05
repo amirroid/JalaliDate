@@ -28,6 +28,12 @@ public class JalaliDateTime {
     public val minute: Int
     public val second: Int
 
+    public val hourIn12: Int
+        get() {
+            val h = hour % 12
+            return if (h == 0) 12 else h
+        }
+
     public val gregorian: LocalDateTime
         get() = algorithm.toGregorian(this)
 

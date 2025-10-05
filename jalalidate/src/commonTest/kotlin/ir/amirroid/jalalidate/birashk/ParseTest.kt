@@ -1,6 +1,8 @@
 package ir.amirroid.jalalidate.birashk
 
 import ir.amirroid.jalalidate.algorithm.defaults.BirashkAlgorithm
+import ir.amirroid.jalalidate.date.JalaliDateTime
+import ir.amirroid.jalalidate.format
 import ir.amirroid.jalalidate.formatter.JalaliDateTimeFormatter
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -218,5 +220,69 @@ class ParseTest {
         assertEquals(1402, date.jalaliYear)
         assertEquals(6, date.jalaliMonth)
         assertEquals(9, date.jalaliDay)
+    }
+
+    @Test
+    fun testParseAmPattern() {
+        val input = "1402/07/15 09:30:00 AM"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("yyyy/MM/dd hh:mm:ss a")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(1402, date.jalaliYear)
+        assertEquals(7, date.jalaliMonth)
+        assertEquals(15, date.jalaliDay)
+        assertEquals(9, date.hour)
+        assertEquals(30, date.minute)
+        assertEquals(0, date.second)
+    }
+
+    @Test
+    fun testParsePmPattern() {
+        val input = "1402/07/15 09:30:00 PM"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("yyyy/MM/dd hh:mm:ss a")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(1402, date.jalaliYear)
+        assertEquals(7, date.jalaliMonth)
+        assertEquals(15, date.jalaliDay)
+        assertEquals(21, date.hour)
+        assertEquals(30, date.minute)
+        assertEquals(0, date.second)
+    }
+
+    @Test
+    fun testParseNoonBoundary() {
+        val input = "1402/07/15 12:00:00 PM"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("yyyy/MM/dd hh:mm:ss a")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(12, date.hour)
+    }
+
+    @Test
+    fun testParseMidnightBoundary() {
+        val input = "1402/07/15 12:00:00 AM"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("yyyy/MM/dd hh:mm:ss a")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(0, date.hour)
+    }
+
+    @Test
+    fun testParseAmPmWithTextMixPattern() {
+        val input = "شنبه 1402/01/01 11:15 PM"
+        val formatter = JalaliDateTimeFormatter()
+            .byUnicodePattern("EEEE yyyy/MM/dd hh:mm a")
+
+        val date = formatter.parse(input, algorithm)
+        assertEquals(1402, date.jalaliYear)
+        assertEquals(1, date.jalaliMonth)
+        assertEquals(1, date.jalaliDay)
+        assertEquals(23, date.hour)
+        assertEquals(15, date.minute)
     }
 }

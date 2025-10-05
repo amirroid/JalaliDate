@@ -148,4 +148,40 @@ class FormatTest {
         val formatted = date.format { byUnicodePattern("E") }
         assertEquals("1", formatted)
     }
+
+
+    @Test
+    fun testFormatAmMarker() {
+        val date = JalaliDateTime(1402, 7, 15, 9, 30, 0)
+        val formatted = date.format { byUnicodePattern("hh:mm a") }
+        assertEquals("09:30 AM", formatted)
+    }
+
+    @Test
+    fun testFormatPmMarker() {
+        val date = JalaliDateTime(1402, 7, 15, 18, 45, 0)
+        val formatted = date.format { byUnicodePattern("hh:mm a") }
+        assertEquals("06:45 PM", formatted)
+    }
+
+    @Test
+    fun testAmPmAtBoundaryNoon() {
+        val date = JalaliDateTime(1402, 7, 15, 12, 0, 0)
+        val formatted = date.format { byUnicodePattern("hh:mm a") }
+        assertEquals("12:00 PM", formatted)
+    }
+
+    @Test
+    fun testAmPmAtBoundaryMidnight() {
+        val date = JalaliDateTime(1402, 7, 15, 0, 0, 0)
+        val formatted = date.format { byUnicodePattern("hh:mm a") }
+        assertEquals("12:00 AM", formatted)
+    }
+
+    @Test
+    fun testFullPatternWithAmPm() {
+        val date = JalaliDateTime(1402, 1, 1, 23, 15, 0)
+        val formatted = date.format { byUnicodePattern("yyyy/MM/dd hh:mm a") }
+        assertEquals("1402/01/01 11:15 PM", formatted)
+    }
 }

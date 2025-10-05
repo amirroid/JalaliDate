@@ -117,6 +117,8 @@ Any missing field (like time) will default to current system time.
 | `d`    | 1 or 2-digit day    | `9`                 |
 | `HH`   | Hour (24h, 2-digit) | `14`                |
 | `H`    | Hour (24h)          | `14`                |
+| `hh`   | Hour (12h, 2-digit) | `09`                |
+| `h`    | Hour (12h)          | `9`                 |
 | `mm`   | Minutes (2-digit)   | `03`                |
 | `m`    | Minutes             | `3`                 |
 | `ss`   | Seconds (2-digit)   | `07`                |

@@ -3,6 +3,7 @@ package ir.amirroid.jalalidate.formatter
 import ir.amirroid.jalalidate.algorithm.JalaliAlgorithm
 import ir.amirroid.jalalidate.configuration.JalaliDateGlobalConfiguration
 import ir.amirroid.jalalidate.date.JalaliDateTime
+import kotlin.compareTo
 
 public enum class Padding { ZERO, SPACE }
 
@@ -13,7 +14,7 @@ public class JalaliDateTimeFormatter {
     private var locale = JalaliDateGlobalConfiguration.formatterLocale
 
     public fun byUnicodePattern(pattern: String): JalaliDateTimeFormatter {
-        val regex = "(yyyy|yy|MMMM|MMM|MM|M|dd|d|HH|H|mm|m|ss|s|EEEE|EEE|E)".toRegex()
+        val regex = "(yyyy|yy|MMMM|MMM|MM|M|dd|d|HH|H|hh|h|mm|m|ss|s|EEEE|EEE|E|a)".toRegex()
         var lastIndex = 0
         for (match in regex.findAll(pattern)) {
             if (lastIndex < match.range.first) {
@@ -43,6 +44,8 @@ public class JalaliDateTimeFormatter {
 
     public fun monthOneDigit(): JalaliDateTimeFormatter =
         addNumericPart("month", { it.jalaliMonth }, 1, Padding.ZERO)
+
+    public fun amPm(): JalaliDateTimeFormatter = addAmPm()
 
     public fun monthFullName(): JalaliDateTimeFormatter {
         parts += MonthNamePart(full = true, locale = locale)
@@ -98,6 +101,11 @@ public class JalaliDateTimeFormatter {
         return this
     }
 
+    private fun addAmPm(): JalaliDateTimeFormatter {
+        parts.add(AmPmPart())
+        return this
+    }
+
     private fun mapPatternToFormatPart(token: String): FormatPart = when (token) {
         "yyyy" -> NumericPart("year", { it.jalaliYear }, 4, Padding.ZERO)
         "yy" -> NumericPart("yearShort", { it.jalaliYear % 100 }, 2, Padding.ZERO)
@@ -119,11 +127,16 @@ public class JalaliDateTimeFormatter {
         "HH" -> NumericPart("hour", { it.hour }, 2, Padding.ZERO)
         "H" -> NumericPart("hour", { it.hour }, 1, Padding.ZERO)
 
+        "hh" -> NumericPart("hour", { it.hourIn12 }, 2, Padding.ZERO)
+        "h" -> NumericPart("hour", { it.hourIn12 }, 1, Padding.ZERO)
+
         "mm" -> NumericPart("minute", { it.minute }, 2, Padding.ZERO)
         "m" -> NumericPart("minute", { it.minute }, 1, Padding.ZERO)
 
         "ss" -> NumericPart("second", { it.second }, 2, Padding.ZERO)
         "s" -> NumericPart("second", { it.second }, 1, Padding.ZERO)
+
+        "a" -> AmPmPart()
 
         else -> LiteralPart(token)
     }
@@ -151,9 +164,17 @@ public class JalaliDateTimeFormatter {
         val year = values["year"] ?: 1300
         val month = values["month"] ?: 1
         val day = values["day"] ?: 1
-        val hour = values["hour"] ?: 0
+        var hour = values["hour"] ?: 0
         val minute = values["minute"] ?: 0
         val second = values["second"] ?: 0
+
+        values["amPm"]?.let { amPm ->
+            hour = when (amPm) {
+                0 -> if (hour == 12) 0 else hour
+                1 -> if (hour < 12) hour + 12 else hour
+                else -> hour
+            }
+        }
 
         return JalaliDateTime(year, month, day, hour, minute, second, algorithm)
     }
