@@ -56,6 +56,35 @@ internal class NumericPart(
     }
 }
 
+internal class AmPmPart : FormatPart {
+    override val name: String = "amPm"
+
+    private val extractor: (JalaliDateTime) -> String = { date ->
+        if (date.hour < 12) "AM" else "PM"
+    }
+
+    private val parser: (String) -> Int? = { text ->
+        when (text.uppercase()) {
+            "AM" -> 0
+            "PM" -> 1
+            else -> null
+        }
+    }
+
+    override fun format(date: JalaliDateTime): String = extractor(date)
+
+    override fun parse(input: String, pos: Int): ParseResult {
+        val match = Regex("(AM|PM)", RegexOption.IGNORE_CASE)
+            .find(input, pos)
+            ?: throw IllegalArgumentException("Expected AM/PM at position $pos")
+
+        val value = parser(match.value)
+            ?: throw IllegalArgumentException("Invalid AM/PM value '${match.value}'")
+
+        return ParseResult(value, pos + match.value.length)
+    }
+}
+
 internal sealed class NamedPart(
     private val full: Boolean,
     private val locale: Locale
