@@ -35,24 +35,26 @@ internal class LiteralPart(val literal: String) : FormatPart {
 internal class NumericPart(
     override val name: String,
     val extractor: (JalaliDateTime) -> Int,
-    val length: Int,
+    val maxLength: Int = 2,
     val padding: Padding = Padding.ZERO
 ) : FormatPart {
     override fun format(date: JalaliDateTime): String {
         val value = extractor(date)
         return when (padding) {
-            Padding.ZERO -> value.toString().padStart(length, '0')
-            Padding.SPACE -> value.toString().padStart(length, ' ')
+            Padding.NONE -> value.toString()
+            Padding.ZERO -> value.toString().padStart(maxLength, '0')
+            Padding.SPACE -> value.toString().padStart(maxLength, ' ')
         }
     }
 
     override fun parse(input: String, pos: Int): ParseResult {
-        val endPos = pos + length
-        if (endPos > input.length) throw IllegalArgumentException("Input too short for numeric part at $pos")
+        val endPos = (pos + maxLength).coerceAtMost(input.length)
         val substring = input.substring(pos, endPos)
-        val number = substring.trim().toIntOrNull()
-            ?: throw IllegalArgumentException("Invalid number at $pos")
-        return ParseResult(number, endPos)
+
+        val numberStr = substring.takeWhile { it.isDigit() }
+        if (numberStr.isEmpty()) throw IllegalArgumentException("Invalid number at $pos")
+        val number = numberStr.toInt()
+        return ParseResult(number, pos + numberStr.length)
     }
 }
 
