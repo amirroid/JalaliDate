@@ -182,4 +182,26 @@ class FormatTest {
         val formatted = date.format { byUnicodePattern("yyyy/MM/dd hh:mm a") }
         assertEquals("1402/01/01 11:15 PM", formatted)
     }
+
+    @Test
+    fun formatHourIn12HourFormatWithAmPm() {
+        val date1 = JalaliDateTime(1402, 1, 1, 13, 5, 0) // 1:05 PM
+        val formatted1 = date1.format { byUnicodePattern("yyyy/MM/dd h:mm a") }
+        assertEquals("1402/01/01 1:05 PM", formatted1)
+
+        val date2 = JalaliDateTime(1402, 1, 1, 23, 15, 0) // 11:15 PM
+        val formatted2 = date2.format { byUnicodePattern("yyyy/MM/dd h:mm a") }
+        assertEquals("1402/01/01 11:15 PM", formatted2)
+
+        val date3 = JalaliDateTime(1402, 1, 1, 9, 0, 0) // 9:00 AM
+        val formatted3 = date3.format { byUnicodePattern("yyyy/MM/dd h:mm a") }
+        assertEquals("1402/01/01 9:00 AM", formatted3)
+    }
+
+    @Test
+    fun hour24FormatSingleDigit() {
+        val date = JalaliDateTime(1402, 1, 1, 7, 5, 0)
+        val formatted = date.format { byUnicodePattern("yyyy/MM/dd H:mm") }
+        assertEquals("1402/01/01 7:05", formatted)
+    }
 }

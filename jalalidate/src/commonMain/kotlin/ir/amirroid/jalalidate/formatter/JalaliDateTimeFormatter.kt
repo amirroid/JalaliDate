@@ -5,7 +5,7 @@ import ir.amirroid.jalalidate.configuration.JalaliDateGlobalConfiguration
 import ir.amirroid.jalalidate.date.JalaliDateTime
 import kotlin.compareTo
 
-public enum class Padding { ZERO, SPACE }
+public enum class Padding { NONE, ZERO, SPACE }
 
 public enum class Locale { PERSIAN, ENGLISH }
 
@@ -125,10 +125,10 @@ public class JalaliDateTimeFormatter {
         "d" -> NumericPart("day", { it.jalaliDay }, 1, Padding.ZERO)
 
         "HH" -> NumericPart("hour", { it.hour }, 2, Padding.ZERO)
-        "H" -> NumericPart("hour", { it.hour }, 1, Padding.ZERO)
+        "H" -> NumericPart("hour", { it.hour }, 2, Padding.NONE)
 
         "hh" -> NumericPart("hour", { it.hourIn12 }, 2, Padding.ZERO)
-        "h" -> NumericPart("hour", { it.hourIn12 }, 1, Padding.ZERO)
+        "h" -> NumericPart("hour", { it.hourIn12 }, 2, Padding.NONE)
 
         "mm" -> NumericPart("minute", { it.minute }, 2, Padding.ZERO)
         "m" -> NumericPart("minute", { it.minute }, 1, Padding.ZERO)

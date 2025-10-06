@@ -1,6 +1,8 @@
 package ir.amirroid.jalalidate.khayyam
 
 import ir.amirroid.jalalidate.algorithm.defaults.KhayyamAlgorithm
+import ir.amirroid.jalalidate.date.JalaliDateTime
+import ir.amirroid.jalalidate.format
 import ir.amirroid.jalalidate.formatter.JalaliDateTimeFormatter
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -282,5 +284,19 @@ class ParseTest {
         assertEquals(1, date.jalaliDay)
         assertEquals(23, date.hour)
         assertEquals(15, date.minute)
+    }
+
+    @Test
+    fun parseHourIn12HourFormatWithVariableLength() {
+        val format = JalaliDateTime.Format { byUnicodePattern("yyyy/MM/dd h:mm a") }
+
+        val date1 = format.parse("1402/01/01 1:05 PM")
+        assertEquals(13, date1.hour) // 1 PM -> 13
+
+        val date2 = format.parse("1402/01/01 11:15 PM")
+        assertEquals(23, date2.hour) // 11 PM -> 23
+
+        val date3 = format.parse("1402/01/01 9:00 AM")
+        assertEquals(9, date3.hour) // 9 AM -> 9
     }
 }
