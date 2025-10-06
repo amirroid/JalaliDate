@@ -12,7 +12,7 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "1.0.1"
+version = "1.0.2"
 group = "io.github.amirroid"
 val projectName = project.name
 
