@@ -30,6 +30,8 @@ kotlin {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
         }
+
+        withHostTest {}
     }
 
     js {
@@ -112,4 +114,11 @@ mavenPublishing {
             url.set("https://github.com/amirroid/JalaliDate")
         }
     }
+}
+
+// KMP no longer creates a root `test` task by default.
+// Some tools and CI workflows still expect a `test` task,
+// so we map it to the JVM desktop test target.
+tasks.register("test") {
+    dependsOn("desktopTest")
 }
