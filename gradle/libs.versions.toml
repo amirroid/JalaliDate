@@ -10,7 +10,7 @@ kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
 datetime = "0.8.0"
 material3 = "1.9.0"
-maven-publish = "0.36.0"
+maven-publish = "0.37.0"
 
 [libraries]
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose" }
